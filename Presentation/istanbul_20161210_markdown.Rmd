@@ -1,0 +1,281 @@
+---
+title: "Assignment 5_Marketing Plan"
+author: "Metin Turgal"
+date: "8 November 2015"
+output: html_document
+---
+##Synopsis
+With this analysis we will inspect whether there is a relationship between Sales and Marketing Budget allocation and seek a model best explaining the relationship
+
+
+###Making Descriptive Analysis of the Data and Initial Inferences
+
+We will first load the data into R and check the structure and parameters of the variables.
+
+```{r}
+marPlan <- read.csv("5_Assignment.csv")
+str(marPlan)
+summary(marPlan)
+```
+
+We also want to check whether there is any "NA" value, since NA's can impair model's functionality. 
+```{r}
+sum(is.na(marPlan))
+```
+Since there is none we can continue with our analysis.
+
+
+###Exporatory Data Analysis:
+Next we will perform some exploratory data analysis.   
+Here we will separately plot the budget against sales and fit regression lines into that spesific plots in order to check implications of relation between sales and the budget variables.
+```{r}
+par(mfrow=c(1,3))
+plot(Sales~TV,data=marPlan,main="TV",col="blue")
+abline(lm(Sales~TV,data=marPlan))
+plot(Sales~Radio,data=marPlan,main="Radio",col="blue")
+abline(lm(Sales~Radio,data=marPlan))
+plot(Sales~Newspaper,data=marPlan,main="Newspaper",col="blue")
+abline(lm(Sales~Newspaper,data=marPlan))
+```
+
+After our preliminary exploratory data analysis our first impression is that there is a relationship between budget and sales, especially TV and Radio seem to be predictive factors. But to reach a decisive conclusion we perform linear regression analysis as the next step.
+
+## Building the Models
+
+First we build a linear regression model with all budget variables and Sales as the dependent variable.
+
+```{r}
+modelMar <-lm(Sales~TV+Newspaper+Radio,data=marPlan)
+summary(modelMar)
+```
+
+###Relationship Between Advertising Budget and Sales
+
+In order to check whether there is a relationship between the Sales and Marketing Budget(variable TV, Radio, Newspaper) we should check F statistics of the model. 
+Here the hypothesis is that all coefficients are zero,i.e there is no relationship between any budget variable and Sales.
+
+$H_0: \beta_{TV}=\beta_{Radio}=\beta_{Newspaper}=0$
+
+The alternative is:   
+$H_A:$ at least one $\beta$ is not zero.
+
+With the p- value almost zero we reject the null hypothesis and conclude there is a relationship between sales and at least one of the budget variables.
+
+###The Strength of the Relationship
+
+With the model build from all budget variables( Tv,Newspaper, Radio) we are able to explain `r summary(modelMar)$r.squared` percent of the total variation in the Sales by our regression model. So we conclude there is a strong relationship between Sales and Advertising budget .But we must also be careful, since our result is inferred from our sample data and must be tested out of sample as well.
+
+###Media Contibuting to Sales
+
+In order to check the important media variables, we will check the p values:  
+with TV's p-value and  Radio's p value: 
+```{r}
+summary(modelMar)$coefficients[2,4]
+summary(modelMar)$coefficients[4,4]
+```
+we can say they are contributing to the sales.(With low p values we reject the null hypothesis that their $\beta$ is zero.)  
+However the p- value is high with Newspaper:
+```{r}
+summary(modelMar)$coefficients[3,4]
+```
+and we can not reject that its $\beta$ is null. Hence it seems to be an unimportant variable and not related to sales. 
+
+### Sales Estimation of Each Medium
+
+Our model estimates each increase of of budget of 1000$ with the following increases in sales:  
+  
+TV: with the coefficient of TV of `r summary(modelMar)$coefficients[2,1]` we will multiply it 1000 to get the increase in sales of  `r summary(modelMar)$coefficients[2,1] *1000`  
+Radio: The radio coefficient is `r summary(modelMar)$coefficients[4,1]` and multipliying it with 1000 we get `r summary(modelMar)$coefficients[4,1]*1000` increase in sales.  
+Newspaper: For newspaper the coefficient is `r summary(modelMar)$coefficients[3,1]`and the increase in sales is: `r summary(modelMar)$coefficients[3,1]*1000` 
+
+However to have a more accurate estimate we should incorporate the standard errors to get the confidence intervals for the increase in sales:  
+  
+For TV it is:  
+```{r}
+sumCoef <-summary(modelMar)$coefficients 
+round(sumCoef[2,1] +c(-1,1)*sumCoef[2,2]*qt(.975,df=modelMar$df),3)
+```
+hence the confidence intervals for sales increase:
+
+```{r}
+round(sumCoef[2,1] +c(-1,1)*sumCoef[2,2]*qt(.975,df=modelMar$df),3)*1000
+``` 
+  
+For Radio it is:  
+```{r}
+round(sumCoef[4,1] +c(-1,1)*sumCoef[4,2]*qt(.975,df=modelMar$df),3)
+```
+hence the confidence intervals for sales increase:
+
+```{r}
+round(sumCoef[4,1] +c(-1,1)*sumCoef[4,2]*qt(.975,df=modelMar$df),3)*1000
+``` 
+  
+For Newspaper it is:  
+```{r}
+round(sumCoef[3,1] +c(-1,1)*sumCoef[3,2]*qt(.975,df=modelMar$df),3)
+```
+hence the confidence intervals for sales increase:
+
+```{r}
+round(sumCoef[3,1] +c(-1,1)*sumCoef[3,2]*qt(.975,df=modelMar$df),3)*1000
+``` 
+
+Since Newspaper's confidence interval includes zero and and in accordance with this it's p-values is bigger than 0.05 we can't say it has a predictive power over sales.We will exclude this from our final model.
+
+### Inspecting for Interaction:
+
+In order to check whether there is an interaction between the predictors we build 2 further models including 3 and 2 additional interaction variables:
+```{r}
+modelMar2 <-lm(Sales~.+TV*Radio+TV*Newspaper,data=marPlan)
+summary(modelMar2)
+modelMar3 <-lm(Sales~.+TV*Radio+TV*Newspaper+Radio*Newspaper,data=marPlan)
+summary(modelMar3)
+```
+
+With increasing ${R}^{2}$ from `r modelMar$rsquared` to `r modelMar2$rsquared` our new model with interaction variables seems to be an improvement. Inspecting the p values shows us that we have interaction between TV and Radio and TV and Newspaper as well. However we do not have and interaction between Radio and Newspaper.  
+Surprisingly our second model has the Newspaper as a related variable with Sales.  
+So we can conclude that TV has an interaction with both Newspaper and Radio and including them increased model ${R}^{2}$.  
+Again with adding variables and increasing ${R}^{2}$ at this level we must be careful to avoid overfitting and concentrating more on out of sample accuracy. 
+
+### Checking for Outliers, Collineratiy and Heteroscedasticy
+
+With the new model, including the interaction elements we will check the residual plots in order to check for outliers and heteroscedasticy.
+```{r}
+par(mfrow=c(2,2))
+plot(modelMar2)
+```
+
+- Heteroscedasticy:
+
+With heteroscedasticy we are checking whether the variance is the same in the the residuals.
+  
+There should be no apparent pattern in residuals because in a good model and all the patterns should be explained via the model and the residuals should be randomly distributed with the same variance throughout the response variables.  
+
+The problem in our model with interaction variables is that we have a clear pattern in the resiudals. To solve this we can add another variable to compensate this pattern in the residuals. Adding the square of TV variable seems to solve this problem.
+
+```{r}
+library(lmtest)
+modelMar4 <-lm(Sales~TV+I(TV^2)+Radio+Newspaper+TV:Radio+TV:Newspaper,data=marPlan)
+par(mfrow=c(2,2))
+plot(modelMar4)
+```
+
+(since I was not able to install bstats package for White test I will perform the heteroscedasticty test with Breusch-Pagan test via the lmtest package in R.)
+
+in order to see the effect we will use the heteroscedasticity test.
+
+```{r}
+bptest(modelMar4)
+bptest(modelMar2)
+bptest(modelMar)
+```
+
+Even though the residual plot seems to improve in terms of heteroscedasticity, the bptest scores differently. This is a point further to investigate.  
+  
+In the case we can confirm the heteroscedasticity the next step would be to regularize the standard errors accordingly. In Eviews this can be done with White parameter but in R I am not able to find a related package to perform this regularization.    
+  
+- Outliers:
+Checking the residual plot we see that the observations 67,156 and 131 are outliers. We can deal with them with creating dummy variables.
+After adding them
+
+```{r}
+Outlier1<-marPlan$Obs==67
+Outlier2<-marPlan$Obs==131
+Outlier3<-marPlan$Obs==167
+
+modelMar5 <- update(modelMar4,.~.+Outlier1+Outlier2+Outlier3)
+par(mfrow=c(2,2))
+plot(modelMar5)
+```
+
+After checking the plot again we will add some more dummy variables.
+
+```{r}
+Outlier4<-marPlan$Obs==133
+Outlier5<-marPlan$Obs==57
+Outlier6<-marPlan$Obs==79
+
+modelMar6 <- update(modelMar5,.~.+Outlier1+Outlier2+Outlier3+Outlier5+Outlier5+Outlier6)
+par(mfrow=c(2,2))
+plot(modelMar6)
+```
+
+Now checking the summary shows us that we almost has a perfect ${R}^{2}$.
+
+```{r}
+summary(modelMar6)
+```
+However three variables Newspaper, TV:Newspaper and Outlier3 interaction variables seem to be unrelated, so we are dropping them from our model.
+
+```{r}
+modelMar7 <- update(modelMar6,.~.- Newspaper-TV:Newspaper-Outlier3)
+summary(modelMar7)
+```
+
+
+- Collinearity:
+With collinearity we will check whether two or more predictor variables are related with each other.
+
+In order to check the colinearity we will use the variance inflation factor (VIF) in R. A VIF value of 1 indicate that there is no collinearity and values usual between 5 and 10 accepted as high values, indication of multicollinearity.
+
+```{r}
+library(car)
+vif(modelMar)
+vif(modelMar7)
+
+```
+
+Even though the orginal variables ( TV, Radio and Newspaper) had no collinearity, our improved model seems to have some collinearity. 
+
+To confirm this we can also plot the variables with high VIF's with a confidence Ellipses. The results are actually not surprising since these variables are related with TV variable.(Either transformation or interaction)
+
+```{r}
+par(mfrow=c(2,2))
+
+confidenceEllipse(modelMar7,which.coef=c(2,3))
+confidenceEllipse(modelMar7,which.coef=c(2,9))
+confidenceEllipse(modelMar7,which.coef=c(3,9))
+```
+
+We can conclude that our ideal model has collinearity, a solution would be to combine the related variables into one but for simplicity I drop the ${TV}^{2}$ variable out. There is a improvement in VIF scores and small drop in ${R}^{2}$.
+
+```{r}
+modelMar8 <- update(modelMar7,.~.- I(TV^2))
+summary(modelMar8)
+par(mfrow=c(2,2))
+plot(modelMar8)
+vif(modelMar8)
+```
+
+
+### Maximum Likelihood
+
+```{r}
+# library(stats4)
+# loglsum <- function(coef1,coef2,coef3,coef4,sigma){error=marPlan$Sales-coef1-coef2*marPlan$TV-coef3*marPlan$Radio-coef4*marPlan$Newspaper;pdf=dnorm(error,0,sigma);-sum(log(pdf))}
+# model<- mle(minuslogl=loglsum,start=list(coef1=0.0,coef2=0.0,coef3=0.0,coef4=0.0,sigma=60))
+# # 
+# model<-mle(minuslogl=loglsum,start=list(coef1=0.0,coef2=0.0,coef3=0.0,coef4=0.0,sigma=60),method= "L-BFGS-B",lower=c(-Inf,-Inf,0),upper=c(Inf,Inf,Inf))
+# summary(model)
+# logLik(model)
+```
+
+
+The result:
+
+Maximum likelihood estimation  
+  
+Call:  
+mle(minuslogl = loglsum, start = list(coef1 = 0, coef2 = 0, coef3 = 0, 
+    coef4 = 0, sigma = 60))  
+  
+Coefficients:  
+         Estimate  Std. Error  
+coef1  2.93888771 0.308773491  
+coef2  0.04576465 0.001380878  
+coef3  0.18853004 0.008524689  
+coef4 -0.00103748 0.005812005  
+sigma  1.66857063 0.083428434  
+  
+Our model derived from maximum likelihood is very similar to our origin model except that Radio's coefficient is slightly lower.
