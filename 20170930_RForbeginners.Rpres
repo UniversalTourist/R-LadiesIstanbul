@@ -1,0 +1,174 @@
+R For Beginners
+========================================================
+author: Hazel Kavili
+date: 2017-09-30
+width: 1400
+height: 1280
+font-family: 'Helvetica'
+
+R and R Studio
+========================================================
+
+Let's meet with the most used IDE (integrated desktop environment) for R
+
+- Source
+- Console
+- Environment, History, Connections
+- Files, Plots, Packages, Help, Viewer
+
+Looking for Help!
+========================================================
+- Ask Google
+- [An introduction to R](http://cran.us.r-project.org/doc/manuals/R-intro.pdf)
+- [Try R](http://tryr.codeschool.com)
+- R mailing list: first, learn how to ask questions!
+- [R Tutorials](http://www.tutorialspoint.com/r/)
+- Get help from R:
+
+```{r, eval = FALSE}
+help.start()
+help(mean)
+?mean
+example(mean)
+```
+
+
+Getting Started 
+========================================================
+
+**R commands:**
+- are case sensitive
+- can be seperated either by a semi-colon(;), or by a newline
+- #comment
+
+**Objects:**
+- varibables, arrays of numbers, character strings, functions
+
+Getting Started - II
+========================================================
+
+**Assignment**  and **Basic Operators**
+- use **<-** for assigments
+- +,-, *, /, ^, %%
+
+**Logical Operators**
+- <,>, <=, >=, ==, !=, !x, x & y, x | y
+
+**Others**
+- sum, sqrt, min, max, mean, var, sd, abs, summary
+
+Most Frequently Used Objects
+========================================================
+- Vectors
+- List
+- Matrices
+- Arrays
+- Factors
+- Data Frames
+
+Vectors
+========================================================
+- use **c()** for concatenate more than one element.
+```{r}
+books <- c("history", "sci-fi", "fantasy")
+print(books)
+
+print(class(books))
+```
+
+
+
+Examples
+========================================================
+```{r}
+#this is R-Ladies Istanbul
+X <- 10
+x <- 5
+print(paste("X is", X))
+print(paste("x is", x))
+cat("X and x are equal? = ", X == x)
+```
+
+```{r}
+myNumbers <- c(1:10) # c is short for concatenate
+myNumbers
+rep(myNumbers, times = 3)
+twice <- rep(myNumbers, each = 2)
+```
+
+Examples - II
+========================================================
+```{r}
+y <- c(1,2,3,10,15,20)
+z <- c(y,4,5,6,y)
+print(y)
+```
+
+- Vector Arithmetic
+```{r}
+5/y
+5*y
+y^2
+sqrt(y)
+```
+
+Simple Manipulations
+========================================================
+
+```{r}
+weights <- c(55, 60, 45, 70, 56, 73, 59, 82)
+sum(weights)
+mean(weights)
+sd(weights)
+var(weights)
+length(weights)
+```
+
+Lists
+========================================================
+- Lists can contain many different types of elements inside.
+```{r}
+myList <- list(c(1,2,3), 15, "hello")
+print(myList)
+```
+
+- Choose an element from lists
+```{r}
+myList[1]
+myList[[1]][2]
+myList[2]
+```
+
+
+Matrices
+========================================================
+- A matrix is **two-dimensional** recteangular data set.
+```{r}
+myMatrix <- matrix(c(1,2,3,4,5,6), nrow = 2, ncol = 3, byrow = TRUE)
+print(myMatrix)
+```
+
+- Choose an element from matrices
+```{r}
+myMatrix[1,2]
+myMatrix[2,]
+myMatrix[,1]
+```
+
+Arrays
+========================================================
+- Arrays can be of nay numbe rof dimensions
+```{r}
+
+```
+
+
+
+
+
+
+
+
+
+
+
