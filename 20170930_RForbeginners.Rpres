@@ -20,6 +20,7 @@ Looking for Help!
 ========================================================
 - Ask Google
 - [An introduction to R](http://cran.us.r-project.org/doc/manuals/R-intro.pdf)
+- [R for Data Science](http://r4ds.had.co.nz) book from Hadley Wickham & Garrett Grolemund
 - [Try R](http://tryr.codeschool.com)
 - R mailing list: first, learn how to ask questions!
 - [R Tutorials](http://www.tutorialspoint.com/r/)
@@ -91,7 +92,6 @@ cat("X and x are equal? = ", X == x)
 
 ```{r}
 myNumbers <- c(1:10) # c is short for concatenate
-myNumbers
 rep(myNumbers, times = 3)
 twice <- rep(myNumbers, each = 2)
 print(twice)
@@ -117,7 +117,7 @@ Examples - III
 ========================================================
 ```{r}
 seq(from = -10, to = 10, by = 1)
-seq(from = 1, lenght = 25, by = 2 )
+seq(from = 1, length = 25, by = 2 )
 ```
 
 Simple Manipulations
@@ -274,9 +274,123 @@ Datasets
 
 ```{r}
 myDataset <- read.csv(file = "~/Desktop/R-LadiesIstanbul/20170930dataset.csv", sep = ",", header = TRUE)
-View(myDataset)
+print(myDataset)
 ```
 
+
+Structure of Dataset
+========================================================
+```{r}
+str(myDataset)
+summary(myDataset)
+```
+
+Magical Words from dplyr!
+========================================================
+- **Variables(columns)**
+  - select
+  - mutate
+
+- **Observations (rows)**
+  - filter
+  - arrange
+
+- **Groups**
+  - summarise
+
+*look for Hadley's book for more*
+
+ %>% (Pipe) Operator
+========================================================
+- Basically tells R to take the value of that which is to the left and pass it to the right as an argument.
+    - cmd + shft + m
+    - kntr + shft + m
+
+```{r}
+library(dplyr)
+myDataset %>% filter(MarketValue > 5) %>% summarise(Average = mean(Assets))
+```
+
+Select
+========================================================
+- Choosing is not losing! 
+```{r, eval = FALSE, warning = FALSE}
+select(dataframe, var1, var2, ...)
+select(dataframe, 1:4, -2)
+```
+
+```{r}
+smallSet <- myDataset %>% select(Company, MarketValue)
+print(smallSet)
+```
+
+- There are also helper functions: **starts_with**, **end_with**, **contains**
+
+Mutate
+========================================================
+- Deals with info in your data which is not display
+
+```{r, eval = FALSE, warning = FALSE}
+mutate(dataframe, newVariable = var1 + var2)
+mutate(dataframe, x = a + b, y = x + c)
+```
+
+```{r}
+mutateSet <- myDataset %>% mutate(TotalMoney = Assets + Profits)
+head(mutateSet)
+```
+
+Filter
+========================================================
+- Filter out rows, specific type of observation
+```{r, eval = FALSE, warning = FALSE}
+filter(dataframe, logicaltest)
+```
+
+```{r}
+filteredSet <- myDataset %>% filter(Assets < 10 & Profits > 1)
+print(filteredSet)
+```
+
+Arrange
+========================================================
+- Helps order observation (default ascending)
+
+```{r, eval = FALSE, warning = FALSE}
+arrange(dataframe, var1)
+arrange(dataframe, var1, desc(var2))
+```
+
+```{r}
+arrangedSet <- myDataset %>% select(GlobalRank, Company, MarketValue) %>%  arrange(desc(MarketValue))
+print(arrangedSet)
+```
+
+Summarise
+========================================================
+- Helps order observation (default ascending)
+
+```{r, eval = FALSE, warning = FALSE}
+summarise(dataframe, newVar = expression,. . .)
+summarise(dataframe, sum = sum(A), avg = mean(B)..)
+```
+
+```{r}
+summarisedSet <- myDataset %>% filter(grepl('Bank', Company) | grepl('bank', Company)) %>% 
+  summarise(averageAssets = mean(Assets), averageSales = mean(Sales))
+
+print(summarisedSet)
+```
+
+*look for grepl*
+
+
+References
+========================================================
+- Ismail Sezen's [github](https://isezen.github.io/r-presentation/intro.html)
+- [data.world](data.world) for many datasets
+- Google :) 
+- Mine Cetinkaya-Rundell's [rpubs]() presentation
 
 
 

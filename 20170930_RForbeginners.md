@@ -20,6 +20,7 @@ Looking for Help!
 ========================================================
 - Ask Google
 - [An introduction to R](http://cran.us.r-project.org/doc/manuals/R-intro.pdf)
+- [R for Data Science](http://r4ds.had.co.nz) book from Hadley Wickham & Garrett Grolemund
 - [Try R](http://tryr.codeschool.com)
 - R mailing list: first, learn how to ask questions!
 - [R Tutorials](http://www.tutorialspoint.com/r/)
@@ -123,14 +124,6 @@ X and x are equal? =  FALSE
 
 ```r
 myNumbers <- c(1:10) # c is short for concatenate
-myNumbers
-```
-
-```
- [1]  1  2  3  4  5  6  7  8  9 10
-```
-
-```r
 rep(myNumbers, times = 3)
 ```
 
@@ -208,11 +201,12 @@ seq(from = -10, to = 10, by = 1)
 ```
 
 ```r
-seq(from = 1, lenght = 25, by = 2 )
+seq(from = 1, length = 25, by = 2 )
 ```
 
 ```
-[1] 1
+ [1]  1  3  5  7  9 11 13 15 17 19 21 23 25 27 29 31 33 35 37 39 41 43 45
+[24] 47 49
 ```
 
 Simple Manipulations
@@ -618,8 +612,251 @@ Datasets
 
 
 
-
+```r
+myDataset <- read.csv(file = "~/Desktop/R-LadiesIstanbul/20170930dataset.csv", sep = ",", header = TRUE)
+print(myDataset)
+```
 
 ```
-Error in View(myDataset) : X11 is not available
+   GlobalRank         Company Sales Profits Assets MarketValue
+1         307      KocHolding  47.1     1.3   61.1        13.6
+2         333       Isbankasi  12.4     1.9  112.7        16.8
+3         341    Garanti Bank   9.8     1.9   99.2        22.0
+4         382          Akbank   8.2     1.7   91.6        20.6
+5         388  SabanciHolding  14.6     1.0   98.3        12.7
+6         543        Halkbank   6.2     1.5   61.0        13.3
+7         711       VakifBank   6.3     0.8   60.6         7.9
+8         802     TurkTelekom   7.1     1.5    9.5        15.0
+9         843        Turkcell   5.9     1.2   10.5        14.8
+10       1210 TurkishAirlines   8.3     0.6   10.5         4.8
+11       1245            Enka   5.7     0.6    8.2         8.3
+12       1788     AnadoluEfes   3.6     0.3    6.5         9.0
+13       1972             BIM   5.5     0.2    1.2         7.5
+14       1977      FordOtosan   5.5     0.4    2.6         4.5
 ```
+
+
+Structure of Dataset
+========================================================
+
+```r
+str(myDataset)
+```
+
+```
+'data.frame':	14 obs. of  6 variables:
+ $ GlobalRank : int  307 333 341 382 388 543 711 802 843 1210 ...
+ $ Company    : Factor w/ 14 levels "Akbank","AnadoluEfes",..: 9 8 6 1 10 7 14 11 12 13 ...
+ $ Sales      : num  47.1 12.4 9.8 8.2 14.6 6.2 6.3 7.1 5.9 8.3 ...
+ $ Profits    : num  1.3 1.9 1.9 1.7 1 1.5 0.8 1.5 1.2 0.6 ...
+ $ Assets     : num  61.1 112.7 99.2 91.6 98.3 ...
+ $ MarketValue: num  13.6 16.8 22 20.6 12.7 13.3 7.9 15 14.8 4.8 ...
+```
+
+```r
+summary(myDataset)
+```
+
+```
+   GlobalRank             Company      Sales           Profits     
+ Min.   : 307.0   Akbank      :1   Min.   : 3.600   Min.   :0.200  
+ 1st Qu.: 383.5   AnadoluEfes :1   1st Qu.: 5.750   1st Qu.:0.600  
+ Median : 756.5   BIM         :1   Median : 6.700   Median :1.100  
+ Mean   : 917.3   Enka        :1   Mean   :10.443   Mean   :1.064  
+ 3rd Qu.:1236.2   FordOtosan  :1   3rd Qu.: 9.425   3rd Qu.:1.500  
+ Max.   :1977.0   Garanti Bank:1   Max.   :47.100   Max.   :1.900  
+                  (Other)     :8                                   
+     Assets         MarketValue   
+ Min.   :  1.200   Min.   : 4.50  
+ 1st Qu.:  8.525   1st Qu.: 8.00  
+ Median : 35.550   Median :13.00  
+ Mean   : 45.250   Mean   :12.20  
+ 3rd Qu.: 83.975   3rd Qu.:14.95  
+ Max.   :112.700   Max.   :22.00  
+                                  
+```
+
+Magical Words from dplyr!
+========================================================
+- **Variables(columns)**
+  - select
+  - mutate
+
+- **Observations (rows)**
+  - filter
+  - arrange
+
+- **Groups**
+  - summarise
+
+*look for Hadley's book for more*
+
+ %>% (Pipe) Operator
+========================================================
+- Basically tells R to take the value of that which is to the left and pass it to the right as an argument.
+    - cmd + shft + m
+    - kntr + shft + m
+
+
+```r
+library(dplyr)
+myDataset %>% filter(MarketValue > 5) %>% summarise(Average = mean(Assets))
+```
+
+```
+  Average
+1    51.7
+```
+
+Select
+========================================================
+- Choosing is not losing! 
+
+```r
+select(dataframe, var1, var2, ...)
+select(dataframe, 1:4, -2)
+```
+
+
+```r
+smallSet <- myDataset %>% select(Company, MarketValue)
+print(smallSet)
+```
+
+```
+           Company MarketValue
+1       KocHolding        13.6
+2        Isbankasi        16.8
+3     Garanti Bank        22.0
+4           Akbank        20.6
+5   SabanciHolding        12.7
+6         Halkbank        13.3
+7        VakifBank         7.9
+8      TurkTelekom        15.0
+9         Turkcell        14.8
+10 TurkishAirlines         4.8
+11            Enka         8.3
+12     AnadoluEfes         9.0
+13             BIM         7.5
+14      FordOtosan         4.5
+```
+
+- There are also helper functions: **starts_with**, **end_with**, **contains**
+
+Mutate
+========================================================
+- Deals with info in your data which is not display
+
+
+```r
+mutate(dataframe, newVariable = var1 + var2)
+mutate(dataframe, x = a + b, y = x + c)
+```
+
+
+```r
+mutateSet <- myDataset %>% mutate(TotalMoney = Assets + Profits)
+head(mutateSet)
+```
+
+```
+  GlobalRank        Company Sales Profits Assets MarketValue TotalMoney
+1        307     KocHolding  47.1     1.3   61.1        13.6       62.4
+2        333      Isbankasi  12.4     1.9  112.7        16.8      114.6
+3        341   Garanti Bank   9.8     1.9   99.2        22.0      101.1
+4        382         Akbank   8.2     1.7   91.6        20.6       93.3
+5        388 SabanciHolding  14.6     1.0   98.3        12.7       99.3
+6        543       Halkbank   6.2     1.5   61.0        13.3       62.5
+```
+
+Filter
+========================================================
+- Filter out rows, specific type of observation
+
+```r
+filter(dataframe, logicaltest)
+```
+
+
+```r
+filteredSet <- myDataset %>% filter(Assets < 10 & Profits > 1)
+print(filteredSet)
+```
+
+```
+  GlobalRank     Company Sales Profits Assets MarketValue
+1        802 TurkTelekom   7.1     1.5    9.5          15
+```
+
+Arrange
+========================================================
+- Helps order observation (default ascending)
+
+
+```r
+arrange(dataframe, var1)
+arrange(dataframe, var1, desc(var2))
+```
+
+
+```r
+arrangedSet <- myDataset %>% select(GlobalRank, Company, MarketValue) %>%  arrange(desc(MarketValue))
+print(arrangedSet)
+```
+
+```
+   GlobalRank         Company MarketValue
+1         341    Garanti Bank        22.0
+2         382          Akbank        20.6
+3         333       Isbankasi        16.8
+4         802     TurkTelekom        15.0
+5         843        Turkcell        14.8
+6         307      KocHolding        13.6
+7         543        Halkbank        13.3
+8         388  SabanciHolding        12.7
+9        1788     AnadoluEfes         9.0
+10       1245            Enka         8.3
+11        711       VakifBank         7.9
+12       1972             BIM         7.5
+13       1210 TurkishAirlines         4.8
+14       1977      FordOtosan         4.5
+```
+
+Summarise
+========================================================
+- Helps order observation (default ascending)
+
+
+```r
+summarise(dataframe, newVar = expression,. . .)
+summarise(dataframe, sum = sum(A), avg = mean(B)..)
+```
+
+
+```r
+summarisedSet <- myDataset %>% filter(grepl('Bank', Company) | grepl('bank', Company)) %>% 
+  summarise(averageAssets = mean(Assets), averageSales = mean(Sales))
+
+print(summarisedSet)
+```
+
+```
+  averageAssets averageSales
+1         85.02         8.58
+```
+
+*look for grepl*
+
+
+References
+========================================================
+- Ismail Sezen's [github](https://isezen.github.io/r-presentation/intro.html)
+- [data.world](data.world) for many datasets
+- Google :) 
+- Mine Cetinkaya-Rundell's [rpubs]() presentation
+
+
+
+
+
+
