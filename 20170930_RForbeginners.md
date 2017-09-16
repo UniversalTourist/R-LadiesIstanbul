@@ -141,6 +141,11 @@ rep(myNumbers, times = 3)
 
 ```r
 twice <- rep(myNumbers, each = 2)
+print(twice)
+```
+
+```
+ [1]  1  1  2  2  3  3  4  4  5  5  6  6  7  7  8  8  9  9 10 10
 ```
 
 Examples - II
@@ -188,6 +193,26 @@ sqrt(y)
 
 ```
 [1] 1.000000 1.414214 1.732051 3.162278 3.872983 4.472136
+```
+
+Examples - III
+========================================================
+
+```r
+seq(from = -10, to = 10, by = 1)
+```
+
+```
+ [1] -10  -9  -8  -7  -6  -5  -4  -3  -2  -1   0   1   2   3   4   5   6
+[18]   7   8   9  10
+```
+
+```r
+seq(from = 1, lenght = 25, by = 2 )
+```
+
+```
+[1] 1
 ```
 
 Simple Manipulations
@@ -255,7 +280,7 @@ print(myList)
 [1] "hello"
 ```
 
-- Choose an element from lists
+- Select an element from lists
 
 ```r
 myList[1]
@@ -299,7 +324,7 @@ print(myMatrix)
 [2,]    4    5    6
 ```
 
-- Choose an element from matrices
+- Select an element from matrices
 
 ```r
 myMatrix[1,2]
@@ -325,18 +350,276 @@ myMatrix[,1]
 [1] 1 4
 ```
 
+```r
+dim(myMatrix)
+```
+
+```
+[1] 2 3
+```
+
+Matrices - II
+========================================================
+
+```r
+myMatrix2 <- matrix(c(-6:-1), nrow = 2, ncol = 3, byrow = TRUE)
+myMatrix + myMatrix2
+```
+
+```
+     [,1] [,2] [,3]
+[1,]   -5   -3   -1
+[2,]    1    3    5
+```
+
+```r
+myMatrix %*% c(1,2,3)
+```
+
+```
+     [,1]
+[1,]   14
+[2,]   32
+```
+
+```r
+diag(myMatrix2) #diagonal    
+```
+
+```
+[1] -6 -2
+```
+
+```r
+t(myMatrix2)  #transpose of matrix
+```
+
+```
+     [,1] [,2]
+[1,]   -6   -3
+[2,]   -5   -2
+[3,]   -4   -1
+```
+
+
 Arrays
 ========================================================
-- Arrays can be of nay numbe rof dimensions
+- Arrays can be of any number of dimensions
+
+```r
+myArray <- array(c('uno','dos', 'tres'), dim = c(3,3,3))
+print(myArray)
+```
+
+```
+, , 1
+
+     [,1]   [,2]   [,3]  
+[1,] "uno"  "uno"  "uno" 
+[2,] "dos"  "dos"  "dos" 
+[3,] "tres" "tres" "tres"
+
+, , 2
+
+     [,1]   [,2]   [,3]  
+[1,] "uno"  "uno"  "uno" 
+[2,] "dos"  "dos"  "dos" 
+[3,] "tres" "tres" "tres"
+
+, , 3
+
+     [,1]   [,2]   [,3]  
+[1,] "uno"  "uno"  "uno" 
+[2,] "dos"  "dos"  "dos" 
+[3,] "tres" "tres" "tres"
+```
+
+Factors
+========================================================
+- They are categorical variables.
+- You can create using a vector. Factors stores the vector along with distinct values of the elements in the vector as labesl.
+- The labels are always character irrespective of wheter it is numeric or character or Boolean etc. input vector. They are useful in statistical modelling.
+
+
+```r
+myVector <- c('blue', 'red', 'violet', 'red', 'red', 'blue')
+print(myVector)
+```
+
+```
+[1] "blue"   "red"    "violet" "red"    "red"    "blue"  
+```
+
+```r
+myVectorFactor <- factor(myVector)
+print(myVectorFactor)
+```
+
+```
+[1] blue   red    violet red    red    blue  
+Levels: blue red violet
+```
+
+```r
+print(nlevels(myVectorFactor))
+```
+
+```
+[1] 3
+```
+
+Tidy Data Concept and Data Frames
+========================================================
+**Tidy Data**
+- Each variable forms a column
+- Each observation forms a row
+- Each type of observational unit forms a table
+
+
+```r
+mySurvey <- data.frame(
+  name = c("Harry", "Ron", "Hermione", "Draco", "Cedric"),
+  gender = c("Male", "Male", "Female", "Male", "Male"),
+  age = c(11, 11, 11, 11, 12),
+  bloodStatus = c("Half-blood", "Pure-blood","Muggle-born", "Pure-blood", NA),
+  house = c("Gryffindor", "Gryffindor", "Gryffindor", "Slytherin", NA)
+  )
+print(mySurvey)
+```
+
+```
+      name gender age bloodStatus      house
+1    Harry   Male  11  Half-blood Gryffindor
+2      Ron   Male  11  Pure-blood Gryffindor
+3 Hermione Female  11 Muggle-born Gryffindor
+4    Draco   Male  11  Pure-blood  Slytherin
+5   Cedric   Male  12        <NA>       <NA>
+```
+
+Indexing, Selecting and Modifying
+========================================================
+
+
+```r
+is.na(mySurvey)
+```
+
+```
+      name gender   age bloodStatus house
+[1,] FALSE  FALSE FALSE       FALSE FALSE
+[2,] FALSE  FALSE FALSE       FALSE FALSE
+[3,] FALSE  FALSE FALSE       FALSE FALSE
+[4,] FALSE  FALSE FALSE       FALSE FALSE
+[5,] FALSE  FALSE FALSE        TRUE  TRUE
+```
+
+```r
+mySurvey[5,4] <- "Pure-blood"
+str(mySurvey)
+```
+
+```
+'data.frame':	5 obs. of  5 variables:
+ $ name       : Factor w/ 5 levels "Cedric","Draco",..: 3 5 4 2 1
+ $ gender     : Factor w/ 2 levels "Female","Male": 2 2 1 2 2
+ $ age        : num  11 11 11 11 12
+ $ bloodStatus: Factor w/ 3 levels "Half-blood","Muggle-born",..: 1 3 2 3 3
+ $ house      : Factor w/ 2 levels "Gryffindor","Slytherin": 1 1 1 2 NA
+```
+
+```r
+levels(mySurvey$house) <- c("Gryffindor", "Slytherin", "Hufflepuff")
+mySurvey[5,5] <- "Hufflepuff"
+print(mySurvey)
+```
+
+```
+      name gender age bloodStatus      house
+1    Harry   Male  11  Half-blood Gryffindor
+2      Ron   Male  11  Pure-blood Gryffindor
+3 Hermione Female  11 Muggle-born Gryffindor
+4    Draco   Male  11  Pure-blood  Slytherin
+5   Cedric   Male  12  Pure-blood Hufflepuff
+```
+
+Indexing, Selecting and Modifying - II
+========================================================
+
+```r
+mySurvey$name
+```
+
+```
+[1] Harry    Ron      Hermione Draco    Cedric  
+Levels: Cedric Draco Harry Hermione Ron
+```
+
+```r
+head(mySurvey)
+```
+
+```
+      name gender age bloodStatus      house
+1    Harry   Male  11  Half-blood Gryffindor
+2      Ron   Male  11  Pure-blood Gryffindor
+3 Hermione Female  11 Muggle-born Gryffindor
+4    Draco   Male  11  Pure-blood  Slytherin
+5   Cedric   Male  12  Pure-blood Hufflepuff
+```
+
+```r
+tail(mySurvey)
+```
+
+```
+      name gender age bloodStatus      house
+1    Harry   Male  11  Half-blood Gryffindor
+2      Ron   Male  11  Pure-blood Gryffindor
+3 Hermione Female  11 Muggle-born Gryffindor
+4    Draco   Male  11  Pure-blood  Slytherin
+5   Cedric   Male  12  Pure-blood Hufflepuff
+```
+- look for:
+
+```r
+x %in% y, !(x %in% y), !x, !is.na()
+```
+
+R Packages
+========================================================
+- R has a lot of packages for you to make some work easily done!
+- **CRAN** is the name of the R package repository but you can find and download many R packages on Github.
+- These packages are about: statistics, modelling, visualisation, manipulating, documentation, making websites/applications etc.
+
+Tidyverse
+========================================================
+- dplyr, broom, tidyr, lubridate 
+- ggplot2
+- purrr, magrittr, forecats, tibble
+- readxl
+
+Installation 
+========================================================
+
+
+```r
+install.packages('tidyverse')
+library(tidyverse)
+```
+
+
+Datasets
+========================================================
+- R has many example datasets and you can look at the list of datasets from [here](https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/00Index.html) to make practice.
+- Today we will use **20170930dataset** and learn how to load a data set on working directory and manipulate it with **dplyr** functions. 
+
+  - To read a dataset, you can use these functions, according to your file type: *read.csv*, *read.table*, *read.xls*, *read.xlsx*  etc.
+  - You need **path** of the file: where you store your file. For example *(/Users/hazelkavili/Desktop/R-LadiesIstanbul/20170930dataset.csv)*
 
 
 
 
 
-
-
-
-
-
-
-
+```
+Error in View(myDataset) : X11 is not available
+```

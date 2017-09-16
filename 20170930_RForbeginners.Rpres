@@ -94,6 +94,7 @@ myNumbers <- c(1:10) # c is short for concatenate
 myNumbers
 rep(myNumbers, times = 3)
 twice <- rep(myNumbers, each = 2)
+print(twice)
 ```
 
 Examples - II
@@ -110,6 +111,13 @@ print(y)
 5*y
 y^2
 sqrt(y)
+```
+
+Examples - III
+========================================================
+```{r}
+seq(from = -10, to = 10, by = 1)
+seq(from = 1, lenght = 25, by = 2 )
 ```
 
 Simple Manipulations
@@ -132,7 +140,7 @@ myList <- list(c(1,2,3), 15, "hello")
 print(myList)
 ```
 
-- Choose an element from lists
+- Select an element from lists
 ```{r}
 myList[1]
 myList[[1]][2]
@@ -148,23 +156,126 @@ myMatrix <- matrix(c(1,2,3,4,5,6), nrow = 2, ncol = 3, byrow = TRUE)
 print(myMatrix)
 ```
 
-- Choose an element from matrices
+- Select an element from matrices
 ```{r}
 myMatrix[1,2]
 myMatrix[2,]
 myMatrix[,1]
+dim(myMatrix)
 ```
+
+Matrices - II
+========================================================
+```{r}
+myMatrix2 <- matrix(c(-6:-1), nrow = 2, ncol = 3, byrow = TRUE)
+myMatrix + myMatrix2
+```
+```{r}
+myMatrix %*% c(1,2,3)
+diag(myMatrix2) #diagonal    
+t(myMatrix2)  #transpose of matrix
+```
+
 
 Arrays
 ========================================================
-- Arrays can be of nay numbe rof dimensions
+- Arrays can be of any number of dimensions
 ```{r}
+myArray <- array(c('uno','dos', 'tres'), dim = c(3,3,3))
+print(myArray)
+```
 
+Factors
+========================================================
+- They are categorical variables.
+- You can create using a vector. Factors stores the vector along with distinct values of the elements in the vector as labesl.
+- The labels are always character irrespective of wheter it is numeric or character or Boolean etc. input vector. They are useful in statistical modelling.
+
+```{r}
+myVector <- c('blue', 'red', 'violet', 'red', 'red', 'blue')
+print(myVector)
+myVectorFactor <- factor(myVector)
+print(myVectorFactor)
+print(nlevels(myVectorFactor))
+```
+
+Tidy Data Concept and Data Frames
+========================================================
+**Tidy Data**
+- Each variable forms a column
+- Each observation forms a row
+- Each type of observational unit forms a table
+
+```{r}
+mySurvey <- data.frame(
+  name = c("Harry", "Ron", "Hermione", "Draco", "Cedric"),
+  gender = c("Male", "Male", "Female", "Male", "Male"),
+  age = c(11, 11, 11, 11, 12),
+  bloodStatus = c("Half-blood", "Pure-blood","Muggle-born", "Pure-blood", NA),
+  house = c("Gryffindor", "Gryffindor", "Gryffindor", "Slytherin", NA)
+  )
+print(mySurvey)
+```
+
+Indexing, Selecting and Modifying
+========================================================
+
+```{r}
+is.na(mySurvey)
+mySurvey[5,4] <- "Pure-blood"
+str(mySurvey)
+levels(mySurvey$house) <- c("Gryffindor", "Slytherin", "Hufflepuff")
+mySurvey[5,5] <- "Hufflepuff"
+print(mySurvey)
+```
+
+Indexing, Selecting and Modifying - II
+========================================================
+```{r}
+mySurvey$name
+head(mySurvey)
+tail(mySurvey)
+```
+- look for:
+```{r, eval = FALSE}
+x %in% y, !(x %in% y), !x, !is.na()
+```
+
+R Packages
+========================================================
+- R has a lot of packages for you to make some work easily done!
+- **CRAN** is the name of the R package repository but you can find and download many R packages on Github.
+- These packages are about: statistics, modelling, visualisation, manipulating, documentation, making websites/applications etc.
+
+Tidyverse
+========================================================
+- dplyr, broom, tidyr, lubridate 
+- ggplot2
+- purrr, magrittr, forecats, tibble
+- readxl
+
+Installation 
+========================================================
+
+```{r, eval = FALSE}
+install.packages('tidyverse')
+library(tidyverse)
 ```
 
 
+Datasets
+========================================================
+- R has many example datasets and you can look at the list of datasets from [here](https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/00Index.html) to make practice.
+- Today we will use **20170930dataset** and learn how to load a data set on working directory and manipulate it with **dplyr** functions. 
+
+  - To read a dataset, you can use these functions, according to your file type: *read.csv*, *read.table*, *read.xls*, *read.xlsx*  etc.
+  - You need **path** of the file: where you store your file. For example *(/Users/hazelkavili/Desktop/R-LadiesIstanbul/20170930dataset.csv)*
 
 
+```{r}
+myDataset <- read.csv(file = "~/Desktop/R-LadiesIstanbul/20170930dataset.csv", sep = ",", header = TRUE)
+View(myDataset)
+```
 
 
 
