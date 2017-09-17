@@ -620,8 +620,8 @@ print(myDataset)
 ```
    GlobalRank         Company Sales Profits Assets MarketValue
 1         307      KocHolding  47.1     1.3   61.1        13.6
-2         333       Isbankasi  12.4     1.9  112.7        16.8
-3         341    Garanti Bank   9.8     1.9   99.2        22.0
+2         333       IsBankasi  12.4     1.9  112.7        16.8
+3         341  GarantiBankasi   9.8     1.9   99.2        22.0
 4         382          Akbank   8.2     1.7   91.6        20.6
 5         388  SabanciHolding  14.6     1.0   98.3        12.7
 6         543        Halkbank   6.2     1.5   61.0        13.3
@@ -658,14 +658,14 @@ summary(myDataset)
 ```
 
 ```
-   GlobalRank             Company      Sales           Profits     
- Min.   : 307.0   Akbank      :1   Min.   : 3.600   Min.   :0.200  
- 1st Qu.: 383.5   AnadoluEfes :1   1st Qu.: 5.750   1st Qu.:0.600  
- Median : 756.5   BIM         :1   Median : 6.700   Median :1.100  
- Mean   : 917.3   Enka        :1   Mean   :10.443   Mean   :1.064  
- 3rd Qu.:1236.2   FordOtosan  :1   3rd Qu.: 9.425   3rd Qu.:1.500  
- Max.   :1977.0   Garanti Bank:1   Max.   :47.100   Max.   :1.900  
-                  (Other)     :8                                   
+   GlobalRank               Company      Sales           Profits     
+ Min.   : 307.0   Akbank        :1   Min.   : 3.600   Min.   :0.200  
+ 1st Qu.: 383.5   AnadoluEfes   :1   1st Qu.: 5.750   1st Qu.:0.600  
+ Median : 756.5   BIM           :1   Median : 6.700   Median :1.100  
+ Mean   : 917.3   Enka          :1   Mean   :10.443   Mean   :1.064  
+ 3rd Qu.:1236.2   FordOtosan    :1   3rd Qu.: 9.425   3rd Qu.:1.500  
+ Max.   :1977.0   GarantiBankasi:1   Max.   :47.100   Max.   :1.900  
+                  (Other)       :8                                   
      Assets         MarketValue   
  Min.   :  1.200   Min.   : 4.50  
  1st Qu.:  8.525   1st Qu.: 8.00  
@@ -689,7 +689,7 @@ Magical Words from dplyr!
 - **Groups**
   - summarise
 
-*look for Hadley's book for more*
+*look for Hadley's book for more magical words*
 
  %>% (Pipe) Operator
 ========================================================
@@ -726,8 +726,8 @@ print(smallSet)
 ```
            Company MarketValue
 1       KocHolding        13.6
-2        Isbankasi        16.8
-3     Garanti Bank        22.0
+2        IsBankasi        16.8
+3   GarantiBankasi        22.0
 4           Akbank        20.6
 5   SabanciHolding        12.7
 6         Halkbank        13.3
@@ -762,8 +762,8 @@ head(mutateSet)
 ```
   GlobalRank        Company Sales Profits Assets MarketValue TotalMoney
 1        307     KocHolding  47.1     1.3   61.1        13.6       62.4
-2        333      Isbankasi  12.4     1.9  112.7        16.8      114.6
-3        341   Garanti Bank   9.8     1.9   99.2        22.0      101.1
+2        333      IsBankasi  12.4     1.9  112.7        16.8      114.6
+3        341 GarantiBankasi   9.8     1.9   99.2        22.0      101.1
 4        382         Akbank   8.2     1.7   91.6        20.6       93.3
 5        388 SabanciHolding  14.6     1.0   98.3        12.7       99.3
 6        543       Halkbank   6.2     1.5   61.0        13.3       62.5
@@ -806,9 +806,9 @@ print(arrangedSet)
 
 ```
    GlobalRank         Company MarketValue
-1         341    Garanti Bank        22.0
+1         341  GarantiBankasi        22.0
 2         382          Akbank        20.6
-3         333       Isbankasi        16.8
+3         333       IsBankasi        16.8
 4         802     TurkTelekom        15.0
 5         843        Turkcell        14.8
 6         307      KocHolding        13.6
@@ -856,7 +856,11 @@ References
 - Mine Cetinkaya-Rundell's [rpubs]() presentation
 
 
+========================================================
+# <center> **Any questions?** </center>
 
-
+#### - hazel@rladies.org & istanbul@rladies.org
+#### - twitter.com/RLadiesIstanbul
+#### - meetup.com/rladies-istanbul
 
 
