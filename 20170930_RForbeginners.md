@@ -16,6 +16,8 @@ Let's meet with the most used IDE (integrated desktop environment) for R
 - Environment, History, Connections
 - Files, Plots, Packages, Help, Viewer
 
+![IDE for R](~/Desktop/R-LadiesIstanbul/rstudio.png)
+
 Looking for Help!
 ========================================================
 - Ask Google
