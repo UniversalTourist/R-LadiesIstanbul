@@ -11,16 +11,18 @@ R and R Studio
 
 Let's meet with the most used IDE (integrated desktop environment) for R
 
-- Source
-- Console
+- Scripts, Console,
+  - Code and workflow are more reproducible if we can document everything that we do.
 - Environment, History, Connections
 - Files, Plots, Packages, Help, Viewer
+  - Mostly 
 
-![IDE for R](~/Desktop/R-LadiesIstanbul/rstudio.png)
+![](~/Desktop/R-LadiesIstanbul/rstudio.png)
 
 Looking for Help!
 ========================================================
 - Ask Google
+- Search in [Stackoverflow](https://stackoverflow.com/questions/tagged/r)
 - [An introduction to R](http://cran.us.r-project.org/doc/manuals/R-intro.pdf)
 - [R for Data Science](http://r4ds.had.co.nz) book from Hadley Wickham & Garrett Grolemund
 - [Try R](http://tryr.codeschool.com)
@@ -35,6 +37,15 @@ help(mean)
 ?mean
 example(mean)
 ```
+
+Getting Started 
+========================================================
+**Teaching base-way or dplyr way**
+Base R codes:
+
+
+dplyr codes:
+
 
 
 Getting Started 
@@ -856,6 +867,7 @@ References
 - [data.world](data.world) for many datasets
 - Google :) 
 - Mine Cetinkaya-Rundell's [rpubs]() presentation
+- [Data Carpentary](http://www.datacarpentry.org/)
 
 
 ========================================================
