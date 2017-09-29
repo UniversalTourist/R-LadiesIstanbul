@@ -1,10 +1,14 @@
-R For Beginners
+R-Ladies Istanbul: R For Beginners
 ========================================================
 author: Hazel Kavili
 date: 2017-09-30
 width: 1400
 height: 1280
 font-family: 'Helvetica'
+
+```{r, eval = TRUE, echo=FALSE, results=FALSE}
+library(tidyverse)
+```
 
 R and R Studio
 ========================================================
@@ -15,9 +19,7 @@ Let's meet with the most used IDE (integrated desktop environment) for R
   - Code and workflow are more reproducible if we can document everything that we do.
 - Environment, History, Connections
 - Files, Plots, Packages, Help, Viewer
-  - Mostly 
-
-![](~/Desktop/R-LadiesIstanbul/rstudio.png)
+  - The viewer window will helpy ou to see Plots, Shiny applications, blog pages of you did!
 
 Looking for Help!
 ========================================================
@@ -37,21 +39,59 @@ help(mean)
 example(mean)
 ```
 
-Getting Started 
+Getting Started - I
 ========================================================
-**Teaching base-way or dplyr way**
-Base R codes:
+### **Motor Trend Car Road Tests - simple dataset**
 ```{r}
+head(mtcars)
+```
+```{r}
+tail(mtcars)
+```
 
+Getting Started - II
+========================================================
+### **Teaching base or tidyverse way**
+
+Base R codes:
+```{r, eval = FALSE}
+mtcars$transmission <- 
+  ifelse(mtcars$am == 0, "automatic", "manual")
 ```
 
 dplyr codes:
-```{r}
+```{r, eval = FALSE}
+mtcars <- mtcars %>%
+  mutate(transmission = case_when(am == 0 ~ "automatic", am == 1 ~ "manual"))
+```
 
+Getting Started - III
+========================================================
+### **Teaching base or tidyverse way**
+#### **Visualisation**
+Base R codes:
+```{r, eval = FALSE}
+mtcars$trans_color <- 
+  ifelse(mtcars$transmission == "automatic", "green", "blue")
+
+pdf("plots/scatter_base.pdf", width = 5, height = 3)
+plot(mtcars$mpg ~ mtcars$disp, col = mtcars$trans_color)
+legend("topright", 
+       legend = c("automatic", "manual"), 
+       pch = 1, col = c("green", "blue"))
+dev.off()
+```
+
+ggplot codes:
+```{r, eval = FALSE}
+p1 <- ggplot(mtcars, aes(x = disp, y = mpg, color = transmission)) +
+       geom_point()
+
+ggsave("plots/scatter_tidy.pdf", p1, width = 5, height = 3)
 ```
 
 
-Getting Started 
+Getting Started - IV
 ========================================================
 
 **R commands:**
@@ -62,7 +102,7 @@ Getting Started
 **Objects:**
 - varibables, arrays of numbers, character strings, functions
 
-Getting Started - II
+Getting Started - V
 ========================================================
 
 **Assignment**  and **Basic Operators**
@@ -87,11 +127,17 @@ Most Frequently Used Objects
 Vectors
 ========================================================
 - use **c()** for concatenate more than one element.
+- in programming vectors are variable sized sequence of values (not necessarily numbers).
 ```{r}
 books <- c("history", "sci-fi", "fantasy")
 print(books)
 
 print(class(books))
+```
+```{r}
+ages <- c(12,13,14,15,9,8)
+print(ages)
+print(class(ages))
 ```
 
 
@@ -404,10 +450,10 @@ print(summarisedSet)
 
 References
 ========================================================
+- Mine Cetinkaya-Rundell's  [Teaching Data Science  to New Users](https://github.com/mine-cetinkaya-rundel/2017-07-05-teach-ds-to-new-user) presentation
 - Ismail Sezen's [github](https://isezen.github.io/r-presentation/intro.html)
 - [data.world](data.world) for many datasets
 - Google :) 
-- Mine Cetinkaya-Rundell's [rpubs]() presentation
 - [Data Carpentary](http://www.datacarpentry.org/)
 
 

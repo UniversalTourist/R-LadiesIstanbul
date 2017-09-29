@@ -1,10 +1,12 @@
-R For Beginners
+R-Ladies Istanbul: R For Beginners
 ========================================================
 author: Hazel Kavili
 date: 2017-09-30
 width: 1400
 height: 1280
 font-family: 'Helvetica'
+
+
 
 R and R Studio
 ========================================================
@@ -15,9 +17,7 @@ Let's meet with the most used IDE (integrated desktop environment) for R
   - Code and workflow are more reproducible if we can document everything that we do.
 - Environment, History, Connections
 - Files, Plots, Packages, Help, Viewer
-  - Mostly 
-
-![](~/Desktop/R-LadiesIstanbul/rstudio.png)
+  - The viewer window will helpy ou to see Plots, Shiny applications, blog pages of you did!
 
 Looking for Help!
 ========================================================
@@ -38,17 +38,85 @@ help(mean)
 example(mean)
 ```
 
-Getting Started 
+Getting Started - I
 ========================================================
-**Teaching base-way or dplyr way**
+### **Motor Trend Car Road Tests - simple dataset**
+
+```r
+head(mtcars)
+```
+
+```
+                   mpg cyl disp  hp drat    wt  qsec vs am gear carb
+Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
+Mazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+Datsun 710        22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
+Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1
+```
+
+```r
+tail(mtcars)
+```
+
+```
+                mpg cyl  disp  hp drat    wt qsec vs am gear carb
+Porsche 914-2  26.0   4 120.3  91 4.43 2.140 16.7  0  1    5    2
+Lotus Europa   30.4   4  95.1 113 3.77 1.513 16.9  1  1    5    2
+Ford Pantera L 15.8   8 351.0 264 4.22 3.170 14.5  0  1    5    4
+Ferrari Dino   19.7   6 145.0 175 3.62 2.770 15.5  0  1    5    6
+Maserati Bora  15.0   8 301.0 335 3.54 3.570 14.6  0  1    5    8
+Volvo 142E     21.4   4 121.0 109 4.11 2.780 18.6  1  1    4    2
+```
+
+Getting Started - II
+========================================================
+### **Teaching base or tidyverse way**
+
 Base R codes:
 
+```r
+mtcars$transmission <- 
+  ifelse(mtcars$am == 0, "automatic", "manual")
+```
 
 dplyr codes:
 
+```r
+mtcars <- mtcars %>%
+  mutate(transmission = case_when(am == 0 ~ "automatic", am == 1 ~ "manual"))
+```
+
+Getting Started - III
+========================================================
+### **Teaching base or tidyverse way**
+#### **Visualisation**
+Base R codes:
+
+```r
+mtcars$trans_color <- 
+  ifelse(mtcars$transmission == "automatic", "green", "blue")
+
+pdf("plots/scatter_base.pdf", width = 5, height = 3)
+plot(mtcars$mpg ~ mtcars$disp, col = mtcars$trans_color)
+legend("topright", 
+       legend = c("automatic", "manual"), 
+       pch = 1, col = c("green", "blue"))
+dev.off()
+```
+
+ggplot codes:
+
+```r
+p1 <- ggplot(mtcars, aes(x = disp, y = mpg, color = transmission)) +
+       geom_point()
+
+ggsave("plots/scatter_tidy.pdf", p1, width = 5, height = 3)
+```
 
 
-Getting Started 
+Getting Started - IV
 ========================================================
 
 **R commands:**
@@ -59,7 +127,7 @@ Getting Started
 **Objects:**
 - varibables, arrays of numbers, character strings, functions
 
-Getting Started - II
+Getting Started - V
 ========================================================
 
 **Assignment**  and **Basic Operators**
@@ -84,6 +152,7 @@ Most Frequently Used Objects
 Vectors
 ========================================================
 - use **c()** for concatenate more than one element.
+- in programming vectors are variable sized sequence of values (not necessarily numbers).
 
 ```r
 books <- c("history", "sci-fi", "fantasy")
@@ -100,6 +169,23 @@ print(class(books))
 
 ```
 [1] "character"
+```
+
+```r
+ages <- c(12,13,14,15,9,8)
+print(ages)
+```
+
+```
+[1] 12 13 14 15  9  8
+```
+
+```r
+print(class(ages))
+```
+
+```
+[1] "numeric"
 ```
 
 
@@ -863,10 +949,10 @@ print(summarisedSet)
 
 References
 ========================================================
+- Mine Cetinkaya-Rundell's  [Teaching Data Science  to New Users](https://github.com/mine-cetinkaya-rundel/2017-07-05-teach-ds-to-new-user) presentation
 - Ismail Sezen's [github](https://isezen.github.io/r-presentation/intro.html)
 - [data.world](data.world) for many datasets
 - Google :) 
-- Mine Cetinkaya-Rundell's [rpubs]() presentation
 - [Data Carpentary](http://www.datacarpentry.org/)
 
 
